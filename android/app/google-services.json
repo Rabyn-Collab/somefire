@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "233723600223",
+    "project_id": "firestart-c33f5",
+    "storage_bucket": "firestart-c33f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233723600223:android:9ac0cd255dd5abcf446aea",
+        "android_client_info": {
+          "package_name": "com.example.firestart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233723600223-so7m3m01rqviecf3ss3ncb2n8u1sm559.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAidx09nAZo-o1s8gu5BPn691KFSivAZp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233723600223-so7m3m01rqviecf3ss3ncb2n8u1sm559.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
