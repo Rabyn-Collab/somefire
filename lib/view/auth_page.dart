@@ -106,12 +106,24 @@ class AuthPage extends StatelessWidget {
                           _form.currentState!.save();
                           if(_form.currentState!.validate()){
                             if(isLogin){
-
+                          final response = await ref.read(authProvider).userLogin(
+                              email: mailController.text.trim(),
+                              password: passController.text.trim()
+                          );
+                          if(response != 'success'){
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                duration: Duration(seconds: 2),
+                                content: Text(response)));
+                          }
 
                             }else{
 
                               if(image == null){
-
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  duration: Duration(seconds: 1),
+                                    content: Text('please select an image')));
                               }else{
                                 await ref.read(authProvider).userSignUp(
                                     email: mailController.text.trim(),
