@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/crud_provider.dart';
+import 'package:firestart/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,15 +20,8 @@ final uid = FirebaseAuth.instance.currentUser!.uid;
             appBar: AppBar(
               backgroundColor: Colors.purple,
               title: Text('Fire App'),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                   ref.read(authProvider).userLogOut();
-                    },
-                    child: Text(
-                      'Log Out', style: TextStyle(color: Colors.white),))
-              ],
             ),
+            drawer: DrawerWidget(),
             body:ListView(
               children: [
                 Container(
@@ -55,7 +49,7 @@ final uid = FirebaseAuth.instance.currentUser!.uid;
                             });
                       },
                       error: (err, stack) => Text('$err'),
-                      loading: () =>CircularProgressIndicator()
+                      loading: () =>Center(child: CircularProgressIndicator())
                   ),
                 )
 

@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 
 final authProvider = Provider((ref) => AuthProvider());
-final authStream = StreamProvider((ref) => FirebaseAuth.instance.authStateChanges());
+final authStream = StreamProvider.autoDispose((ref) => FirebaseAuth.instance.authStateChanges());
 
 class AuthProvider{
 
