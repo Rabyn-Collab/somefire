@@ -1,4 +1,3 @@
-import 'dart:html';
 
 class Like{
   final int likes;
@@ -62,6 +61,7 @@ class Post{
   final String userId;
   final String title;
   final String imageUrl;
+  final  String imageId;
   final String description;
   final List<Comment> comments;
   final Like like;
@@ -72,6 +72,7 @@ class Post{
     required this.title,
     required this.userId,
     required this.id,
+    required this.imageId,
     required this.comments,
     required this.description
 });

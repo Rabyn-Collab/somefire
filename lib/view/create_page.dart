@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firestart/providers/auth_provider.dart';
+import 'package:firestart/providers/crud_provider.dart';
 import 'package:firestart/providers/image_provider.dart';
 import 'package:firestart/providers/loginProvider.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,7 @@ class CreatePage extends StatelessWidget {
   final titleController = TextEditingController();
   final descController = TextEditingController();
 
-
+final uid = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,11 +86,14 @@ class CreatePage extends StatelessWidget {
                                     duration: Duration(seconds: 1),
                                     content: Text('please select an image')));
                               }else{
-                                // await ref.read(authProvider).userSignUp(
-                                //     email: mailController.text.trim(),
-                                //     password: passController.text.trim(),
-                                //     userName: nameController.text.trim(),
-                                //     image: image);
+                              final response =  await ref.read(crudProvider).addPostData(
+                                 title: titleController.text.trim(),
+                                    description: descController.text.trim(),
+                                    userId: uid,
+                                    image: image);
+                              if(response == 'success'){
+                                Navigator.of(context).pop();
+                              }
 
                               }
 

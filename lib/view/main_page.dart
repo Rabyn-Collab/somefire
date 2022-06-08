@@ -16,6 +16,7 @@ final uid = FirebaseAuth.instance.currentUser!.uid;
     return Consumer(
       builder: (context, ref, child) {
         final userData = ref.watch(usersStream);
+        final postData = ref.watch(postStream);
         return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.purple,
@@ -50,6 +51,46 @@ final uid = FirebaseAuth.instance.currentUser!.uid;
                       },
                       error: (err, stack) => Text('$err'),
                       loading: () =>Center(child: CircularProgressIndicator())
+                  ),
+                ),
+                Container(
+                  child: postData.when(
+                      data: (data){
+                        return Expanded(child: ListView.builder(
+                          shrinkWrap: true,
+                            itemCount: data.length,
+                            itemBuilder: (context, index){
+                              final dat = data[index];
+                              return Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                    Text(dat.title),
+                                      if(uid == dat.userId)  IconButton(onPressed: (){}, icon: Icon(Icons.more_horiz))
+                                    ],
+                                  ),
+                                  if(uid != dat.userId)   SizedBox(height: 10,),
+                                  Container(
+                                      height: 300,
+                                      child: Image.network(dat.imageUrl)),
+                                  if(uid == dat.userId) SizedBox(height: 15,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(dat.description),
+                                    if(uid != dat.userId)  IconButton(onPressed: (){}, icon: Icon(Icons.thumb_up))
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }
+                        ));
+                      },
+                      error: (err, stack) => Container(child: Text('$err'),),
+                      loading: () => Center(child: CircularProgressIndicator(
+                        color: Colors.purple,
+                      ),)
                   ),
                 )
 
