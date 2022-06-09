@@ -84,7 +84,7 @@ class CrudProvider{
         await newRef.putFile(imageFile);
         final url = await newRef.getDownloadURL();
 
-        await postDb.add({
+        await postDb.doc(postId).update({
           'title': title,
           'description': description,
           'imageUrl': url,
@@ -104,7 +104,7 @@ class CrudProvider{
     try{
         final oldRef = FirebaseStorage.instance.ref().child('postImage/$photoId');
         await oldRef.delete();
-        await postDb.doc(photoId).delete();
+        await postDb.doc(postId).delete();
       return 'success';
     }on FirebaseException catch (err){
       return '${err.message}';
@@ -112,6 +112,22 @@ class CrudProvider{
 
   }
 
+
+  Future<String> addLike({required String postId, required int like, required String username
+  }) async{
+    try{
+      await postDb.doc(postId).update({
+        'like': {
+          'likes': like + 1,
+          'usernames': FieldValue.arrayUnion([username])
+        }
+      });
+      return 'success';
+    }on FirebaseException catch (err){
+      return '${err.message}';
+    }
+
+  }
 
 
 
