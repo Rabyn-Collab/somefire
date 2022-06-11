@@ -28,12 +28,12 @@ class Comment{
   final String comment;
   final String userImage;
 
-  Comment({required this.username, required this.comment, required this.userImage});
+  Comment({required this.username, required this.comment,  required this.userImage});
 
   factory Comment.fromJson(Map<String, dynamic> json){
     return Comment(
        username: json['username'],
-      comment: json['comment'],
+       comment: json['comment'],
       userImage: json['userImage']
     );
   }
@@ -42,7 +42,7 @@ class Comment{
   Map<String, dynamic> toJson(){
     return {
       'username': this.username,
-      ' comment': this.comment,
+      'comment': this.comment,
       'userImage': this.userImage
     };
   }

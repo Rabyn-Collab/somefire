@@ -130,6 +130,21 @@ class CrudProvider{
   }
 
 
+  Future<String> addComment({required String postId, required Comment comment}) async{
+    try{
+      await postDb.doc(postId).update({
+          'comments': FieldValue.arrayUnion([comment.toJson()])
+
+      });
+      return 'success';
+    }on FirebaseException catch (err){
+      return '${err.message}';
+    }
+
+  }
+
+
+
 
   Stream<List<Post>> getPostsStream(){
     return postDb.snapshots().map((event) => getPost(event));

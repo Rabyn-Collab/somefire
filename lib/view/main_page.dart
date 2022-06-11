@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firestart/models/user.dart';
 import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/crud_provider.dart';
+import 'package:firestart/view/detail_page.dart';
 import 'package:firestart/view/edit_page.dart';
 import 'package:firestart/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ late UserData user;
     return Consumer(builder: (context, ref, child) {
       final userData = ref.watch(usersStream);
       final postData = ref.watch(postStream);
+      print(postData);
       return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.purple,
@@ -61,6 +63,7 @@ late UserData user;
                 height: 612,
                 child: postData.when(
                     data: (data) {
+                      print(data);
                       return ListView.builder(
                           shrinkWrap: true,
                           itemCount: data.length,
@@ -122,9 +125,14 @@ late UserData user;
                                   SizedBox(
                                     height: 10,
                                   ),
-                                Container(
-                                    height: 300,
-                                    child: Image.network(dat.imageUrl)),
+                                InkWell(
+                                  onTap: (){
+                                    Get.to(() => DetailPage(dat, user), transition: Transition.leftToRight);
+                                  },
+                                  child: Container(
+                                      height: 300,
+                                      child: Image.network(dat.imageUrl)),
+                                ),
                                 if (uid == dat.userId)
                                   SizedBox(
                                     height: 15,
