@@ -1,27 +1,32 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firestart/models/user.dart';
-import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/crud_provider.dart';
 import 'package:firestart/view/detail_page.dart';
 import 'package:firestart/view/edit_page.dart';
+import 'package:firestart/view/recent_chats.dart';
+import 'package:firestart/view/user_detail.dart';
 import 'package:firestart/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 class MainPage extends StatelessWidget {
+
   final uid = FirebaseAuth.instance.currentUser!.uid;
-late UserData user;
+late types.User user;
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
       final userData = ref.watch(usersStream);
       final postData = ref.watch(postStream);
-      print(postData);
       return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.purple,
             title: Text('Fire App'),
+            actions: [
+              TextButton(onPressed: (){
+                Get.to(() => RecentChats(), transition: Transition.leftToRight);
+              }, child: Text('Recent Chats', style: TextStyle(color: Colors.white),))
+            ],
           ),
           drawer: DrawerWidget(),
           body: ListView(
@@ -30,9 +35,9 @@ late UserData user;
                 height: 170,
                 child: userData.when(
                     data: (data) {
-                      user = data.firstWhere((element) => element.userId == uid);
+                      user = data.firstWhere((element) => element.metadata!['userId'] == uid);
                       final dat = data
-                          .where((element) => element.userId != uid)
+                          .where((element) => element.metadata!['userId'] != uid)
                           .toList();
                       return ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -42,15 +47,20 @@ late UserData user;
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
-                                  CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage:
-                                        NetworkImage(dat[index].userImageUrl),
+                                  InkWell(
+                                    onTap: (){
+                                      Get.to(() => UserDetail(dat[index]), transition: Transition.leftToRight);
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage:
+                                          NetworkImage(dat[index].imageUrl!),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Text(dat[index].username)
+                                  Text(dat[index].firstName!)
                                 ],
                               ),
                             );
@@ -147,14 +157,14 @@ late UserData user;
                                         children: [
                                           IconButton(
                                               onPressed: () {
-                                               if(dat.like.usernames.contains(user.username)){
+                                               if(dat.like.usernames.contains(user.firstName)){
                                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                                      duration: Duration(seconds: 1),
                                                      content: Text('You\'ve already like this post')));
                                                }else{
                                                  ref.read(crudProvider).addLike(
-                                                     postId: dat.id, like: dat.like.likes, username: user.username);
+                                                     postId: dat.id, like: dat.like.likes, username: user.firstName!);
                                                }
 
                                               },

@@ -3,12 +3,12 @@ import 'package:firestart/models/user.dart';
 import 'package:firestart/providers/crud_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 
 class DetailPage extends StatelessWidget {
 final Post post;
-final UserData user;
+final types.User user;
 DetailPage(this.post, this.user);
 final commentController = TextEditingController();
 
@@ -40,9 +40,9 @@ final commentController = TextEditingController();
                           },
                           onFieldSubmitted: (val) {
                             final newComment = Comment(
-                                username: user.username,
+                                username: user.firstName!,
                                comment: val,
-                                userImage: user.userImageUrl);
+                                userImage: user.imageUrl!);
                             ref.read(crudProvider).addComment(postId: post.id, comment: newComment);
                           },
                           decoration: InputDecoration(

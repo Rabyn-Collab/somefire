@@ -1,11 +1,11 @@
 import 'dart:io';
-
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 final authProvider = Provider((ref) => AuthProvider());
 final authStream = StreamProvider.autoDispose((ref) => FirebaseAuth.instance.authStateChanges());
@@ -33,14 +33,18 @@ class AuthProvider{
         final ref = FirebaseStorage.instance.ref().child('userImage/$imageName');
         await ref.putFile(imageFile);
         final url = await ref.getDownloadURL();
-
         final response = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-         await userDb.add({
-           'username': userName,
-           'userId': response.user!.uid,
-           'email': email,
-           'userImageUrl': url
-         });
+        await FirebaseChatCore.instance.createUserInFirestore(
+            types.User(
+              firstName: userName,
+                id: response.user!.uid,
+              imageUrl: url,
+              metadata: {
+                'email': email,
+                'userId': response.user!.uid
+              }
+            )
+        );
         return 'success';
       }on FirebaseAuthException catch (err){
         return '${err.message}';

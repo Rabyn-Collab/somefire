@@ -24,7 +24,7 @@ class DrawerWidget extends StatelessWidget {
                     DrawerHeader(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(data.userImageUrl),
+                              image: NetworkImage(data.imageUrl!),
                               colorFilter: ColorFilter.mode(
                               Colors.black26,
                               BlendMode.darken
@@ -34,8 +34,8 @@ class DrawerWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(data.username, style: TextStyle(color: Colors.white),),
-                            Text(data.email,style: TextStyle(color: Colors.white)),
+                            Text(data.firstName!, style: TextStyle(color: Colors.white),),
+                            Text(data.metadata!['email'],style: TextStyle(color: Colors.white)),
                           ],
                         )
                     ),
@@ -61,7 +61,7 @@ class DrawerWidget extends StatelessWidget {
                     ],
                   );
                 },
-                error: (err, stack) => Center(child: Text('something went wrong'),),
+                error: (err, stack) => Center(child: Text('$err'),),
                 loading: () => Center(child: CircularProgressIndicator(),)
             )
         );

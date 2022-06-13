@@ -1,10 +1,11 @@
 import 'dart:io';
-
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firestart/models/post.dart';
 import 'package:firestart/models/user.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -20,22 +21,41 @@ class CrudProvider{
   CollectionReference userDb = FirebaseFirestore.instance.collection('users');
   CollectionReference postDb = FirebaseFirestore.instance.collection('posts');
 
-  Stream<List<UserData>> getUsersStream(){
+  Stream<List<types.User>> getUsersStream(){
      return userDb.snapshots().map((event) => getData(event));
   }
 
-  List<UserData>  getData(QuerySnapshot snapshot){
-      return  snapshot.docs.map((e) => UserData.fromJson(e.data() as Map<String, dynamic>)).toList();
+  List<types.User>  getData(QuerySnapshot snapshot){
+      return  snapshot.docs.map((e) {
+        final json = e.data() as Map<String, dynamic>;
+        return types.User(
+          id: e.id,
+          metadata: json['metadata'],
+          imageUrl: json['imageUrl'],
+          firstName: json['firstName'],
+          createdAt: (json['createdAt'] as Timestamp).microsecondsSinceEpoch
+
+        );
+      }).toList();
   }
 
-  Stream<UserData> getUserStream(){
+  Stream<types.User> getUserStream(){
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    final userSnap = userDb.where('userId', isEqualTo: uid).snapshots();
+    final userS = FirebaseChatCore.instance.firebaseUser!.metadata;
+    final userSnap = userDb.where('metadata.userId', isEqualTo:  uid ).snapshots();
     return userSnap.map((event) => getDat(event));
   }
 
-  UserData  getDat(QuerySnapshot snapshot){
-    return  UserData.fromJson(snapshot.docs[0].data() as Map<String, dynamic>);
+  types.User  getDat(QuerySnapshot snapshot){
+    final json = snapshot.docs[0].data() as Map<String, dynamic>;
+    return  types.User(
+        id: snapshot.docs[0].id,
+        metadata: json['metadata'] ,
+        imageUrl: json['imageUrl'],
+        firstName: json['firstName'],
+        createdAt: (json['createdAt'] as Timestamp).microsecondsSinceEpoch
+
+    );
   }
 
 
