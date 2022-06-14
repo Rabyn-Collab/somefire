@@ -1,18 +1,60 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firestart/view/auth_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firestart/view/status_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
+
+}
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  "High_importance_channel",
+  "High_importance_channel",
+  importance: Importance.high,
+);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+const InitializationSettings initializationSettings =
+InitializationSettings(
+  android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+);
 
 void main () async {
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
 runApp(ProviderScope(child: Home()));
+
+FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+await flutterLocalNotificationsPlugin
+    .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+    ?.createNotificationChannel(channel);
+flutterLocalNotificationsPlugin.initialize(
+  initializationSettings,
+  onSelectNotification: (String? id) async {
+    if (id!.isNotEmpty) {
+      print("Router Value1234 $id");
+
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (context) => DemoScreen(
+      //       id: id,
+      //     ),
+      //   ),
+      // );
+
+
+    }
+  },
+);
 
 }
 
