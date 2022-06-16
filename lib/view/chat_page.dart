@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,7 +112,28 @@ class _ChatPageState extends State<ChatPage> {
     FirebaseChatCore.instance.updateMessage(updatedMessage, widget.room.id);
   }
 
-  void _handleSendPressed(types.PartialText message) {
+  void _handleSendPressed(types.PartialText message) async {
+          final dio = Dio();
+          try{
+
+            final response = await dio.post('https://fcm.googleapis.com/fcm/send', data: {
+              "notification": {
+                "title": "hello firbase project",
+                "body": "${message.text}",
+                "android_channel_id": "High_importance_channel"
+              },
+              "to": "fBLBaXMBRBaKl6obLMevsi:APA91bGcGRlepByf5-nd-4pFCptBaYbQYzc8gJ625HcvnldX6wtxCMn-98JDIxTFC_0PJYNs9UkiVRmTGUeKRnCpTvJfSPXg1qSTF4SakvO8W3FDq5pq06LXkjvbR1TBB5Zt-w9wt_rC"
+            }, options: Options(
+              headers: {
+                HttpHeaders.authorizationHeader: 'key=AAAANmsDHV8:APA91bGq2ylH1AYVTcSRPAmDelveo46aXRygtMNUkKqQWmhBRGYtC4SmDrQOwDCODwj9eRVtQRi2O2O0Z8K9I4qO-5637gJmk73jPXy8pkjr28JbS0gky5OVjXRKAIBa-42fVJuq24Z9'
+              }
+            ));
+            print(response);
+
+          }on DioError catch (err){
+
+          }
+
     FirebaseChatCore.instance.sendMessage(
       message,
       widget.room.id,

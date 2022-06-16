@@ -43,10 +43,11 @@ dependencies:
   cached_network_image: ^3.2.1
   image_picker: ^0.8.5+3
   get: ^4.6.5
-  flutter_chat_ui: ^1.5.8
-  flutter_firebase_chat_core: ^1.5.4
-  flutter_chat_types: ^3.3.4
+  flutter_chat_ui: ^1.6.1
+  flutter_firebase_chat_core: ^1.6.1
+  flutter_chat_types: ^3.4.2
   flutter_local_notifications: ^9.6.0
+  dio: ^4.0.6
 
 dev_dependencies:
   flutter_test:
