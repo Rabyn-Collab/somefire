@@ -11,8 +11,8 @@ import 'package:image_picker/image_picker.dart';
 
 
 
-final usersStream = StreamProvider((ref) => CrudProvider().getUsersStream());
-final currentUserStream =StreamProvider.autoDispose((ref) => CrudProvider().getUserStream());
+final usersStream = StreamProvider((ref) => CrudProvider().getUsers());
+final currentUserStream =StreamProvider.autoDispose((ref) => CrudProvider().getSingleUser());
 final crudProvider = Provider((ref) => CrudProvider());
 final postStream = StreamProvider((ref) => CrudProvider().getPostsStream());
 
@@ -21,41 +21,46 @@ class CrudProvider{
   CollectionReference userDb = FirebaseFirestore.instance.collection('users');
   CollectionReference postDb = FirebaseFirestore.instance.collection('posts');
 
-  Stream<List<types.User>> getUsersStream(){
-     return userDb.snapshots().map((event) => getData(event));
-  }
-
-  List<types.User>  getData(QuerySnapshot snapshot){
-      return  snapshot.docs.map((e) {
-        final json = e.data() as Map<String, dynamic>;
-        return types.User(
-          id: e.id,
-          metadata: json['metadata'],
-          imageUrl: json['imageUrl'],
-          firstName: json['firstName'],
-          createdAt: (json['createdAt'] as Timestamp).microsecondsSinceEpoch
-
-        );
-      }).toList();
-  }
-
-  Stream<types.User> getUserStream(){
+  Stream<types.User> getSingleUser(){
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    final userS = FirebaseChatCore.instance.firebaseUser!.metadata;
-    final userSnap = userDb.where('metadata.userId', isEqualTo:  uid ).snapshots();
-    return userSnap.map((event) => getDat(event));
+    final response = userDb.doc(uid).snapshots();
+
+    final userType = response.map((event) {
+      final json = event.data() as Map<String, dynamic>;
+      return types.User(
+        id: event.id,
+        imageUrl: json['imageUrl'],
+        metadata: {
+          'email': json['metadata']['email'],
+          'userToken': json['metadata']['userToken']
+        },
+        firstName: json['firstName'],
+      );
+    } );
+    return userType;
+
   }
 
-  types.User  getDat(QuerySnapshot snapshot){
-    final json = snapshot.docs[0].data() as Map<String, dynamic>;
-    return  types.User(
-        id: snapshot.docs[0].id,
-        metadata: json['metadata'] ,
-        imageUrl: json['imageUrl'],
-        firstName: json['firstName'],
-        createdAt: (json['createdAt'] as Timestamp).microsecondsSinceEpoch
 
-    );
+  Stream<List<types.User>> getUsers(){
+    return userDb.snapshots().map((event) => getUserData(event));
+  }
+
+  List<types.User>  getUserData(QuerySnapshot snapshot){
+    final response = snapshot.docs.map((event) {
+      final json = event.data() as Map<String, dynamic>;
+      return types.User(
+        id: event.id,
+        imageUrl: json['imageUrl'],
+        metadata: {
+          'email': json['metadata']['email'],
+          'userToken': json['metadata']['userToken']
+        },
+        firstName: json['firstName'],
+      );
+    }).toList();
+
+    return response;
   }
 
 

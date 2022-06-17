@@ -1,5 +1,6 @@
 import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/crud_provider.dart';
+import 'package:firestart/providers/loginProvider.dart';
 import 'package:firestart/view/create_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,7 @@ class DrawerWidget extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         final userData = ref.watch(currentUserStream);
+       final isLoad =  ref.watch(loadingProvider);
         return Drawer(
             child: userData.when(
                 data: (data){
@@ -52,6 +54,9 @@ class DrawerWidget extends StatelessWidget {
                       ListTile(
                         onTap: (){
                           Navigator.of(context).pop();
+                          if(isLoad){
+                            ref.read(loadingProvider.notifier).toggle();
+                          }
                           ref.read(authProvider).userLogOut();
                         },
                         leading: Icon(Icons.exit_to_app),

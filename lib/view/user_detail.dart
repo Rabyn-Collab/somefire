@@ -12,6 +12,7 @@ final types.User user;
 UserDetail(this.user);
   @override
   Widget build(BuildContext context) {
+    print(user.metadata!['userToken']);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -37,7 +38,7 @@ UserDetail(this.user);
                             ElevatedButton(
                                 onPressed: () async {
                               final response = await ref.read(roomProvider).createRoom(user);
-                              Get.to(() => ChatPage(room: response));
+                              Get.to(() => ChatPage(room: response, user: user,));
                             }, child: Text('start chat'))
                           ],
                         )
@@ -47,11 +48,11 @@ UserDetail(this.user);
                   ),
                   SizedBox(height: 50,),
                   Container(
-                    height: 640,
                       child:  postData.when(
                           data: (data){
                             final post = data.where((element) => element.userId == user.metadata!['userId']).toList();
                             return GridView.builder(
+                              shrinkWrap: true,
                                 itemCount: post.length,
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,

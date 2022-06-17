@@ -10,12 +10,10 @@ import 'package:image_picker/image_picker.dart';
 
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({
-    Key? key,
-    required this.room,
-  }) : super(key: key);
+ ChatPage({required this.room, required this.user});
 
   final types.Room room;
+  final types.User user;
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -113,31 +111,31 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleSendPressed(types.PartialText message) async {
-          final dio = Dio();
-          try{
+    print(widget.user.metadata!['userToken']);
+          // final dio = Dio();
+          // try{
+          //
+          //   final response = await dio.post('https://fcm.googleapis.com/fcm/send', data: {
+          //     "notification": {
+          //       "title": "${widget.user.firstName}",
+          //       "body": "${message.text}",
+          //       "android_channel_id": "High_importance_channel"
+          //     },
+          //     "to": '${widget.user.metadata!['userToken']}'
+          //   }, options: Options(
+          //     headers: {
+          //       HttpHeaders.authorizationHeader: 'key=AAAANmsDHV8:APA91bGq2ylH1AYVTcSRPAmDelveo46aXRygtMNUkKqQWmhBRGYtC4SmDrQOwDCODwj9eRVtQRi2O2O0Z8K9I4qO-5637gJmk73jPXy8pkjr28JbS0gky5OVjXRKAIBa-42fVJuq24Z9'
+          //     }
+          //   ));
+          //
+          // }on DioError catch (err){
+          //
+          // }
 
-            final response = await dio.post('https://fcm.googleapis.com/fcm/send', data: {
-              "notification": {
-                "title": "hello firbase project",
-                "body": "${message.text}",
-                "android_channel_id": "High_importance_channel"
-              },
-              "to": "fBLBaXMBRBaKl6obLMevsi:APA91bGcGRlepByf5-nd-4pFCptBaYbQYzc8gJ625HcvnldX6wtxCMn-98JDIxTFC_0PJYNs9UkiVRmTGUeKRnCpTvJfSPXg1qSTF4SakvO8W3FDq5pq06LXkjvbR1TBB5Zt-w9wt_rC"
-            }, options: Options(
-              headers: {
-                HttpHeaders.authorizationHeader: 'key=AAAANmsDHV8:APA91bGq2ylH1AYVTcSRPAmDelveo46aXRygtMNUkKqQWmhBRGYtC4SmDrQOwDCODwj9eRVtQRi2O2O0Z8K9I4qO-5637gJmk73jPXy8pkjr28JbS0gky5OVjXRKAIBa-42fVJuq24Z9'
-              }
-            ));
-            print(response);
-
-          }on DioError catch (err){
-
-          }
-
-    FirebaseChatCore.instance.sendMessage(
-      message,
-      widget.room.id,
-    );
+    // FirebaseChatCore.instance.sendMessage(
+    //   message,
+    //   widget.room.id,
+    // );
   }
 
   void _setAttachmentUploading(bool uploading) {

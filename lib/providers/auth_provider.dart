@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,6 +35,7 @@ class AuthProvider{
         await ref.putFile(imageFile);
         final url = await ref.getDownloadURL();
         final response = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+        final userToken = await FirebaseMessaging.instance.getToken();
         await FirebaseChatCore.instance.createUserInFirestore(
             types.User(
               firstName: userName,
@@ -41,7 +43,8 @@ class AuthProvider{
               imageUrl: url,
               metadata: {
                 'email': email,
-                'userId': response.user!.uid
+                'userId': response.user!.uid,
+                'userToken': userToken
               }
             )
         );

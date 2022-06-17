@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 class RecentChats extends StatelessWidget {
 
   final uid = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,9 +22,10 @@ class RecentChats extends StatelessWidget {
                     return ListView.builder(
                         itemCount: data.length,
                         itemBuilder: (context, index){
+                          final friend = data[index].users.firstWhere((element) => element.id !=uid);
                           return ListTile(
                             onTap: (){
-                              Get.to(() => ChatPage(room: data[index]));
+                             Get.to(() => ChatPage(room: data[index], user: friend.metadata!['userToken']));
                             },
                             leading: CircleAvatar(
                          backgroundImage: NetworkImage(data[index].imageUrl!),

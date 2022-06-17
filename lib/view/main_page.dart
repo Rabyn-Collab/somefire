@@ -75,15 +75,15 @@ late types.User user;
       },
     );
 
-    getToken();
+    // getToken();
   }
 
 
 
-  Future<void> getToken()async{
-    final response = await FirebaseMessaging.instance.getToken();
-    print(response);
-  }
+  // Future<void> getToken()async{
+  //   final response = await FirebaseMessaging.instance.getToken();
+  //   print(response);
+  // }
 
 
 
@@ -109,11 +109,15 @@ late types.User user;
                 height: 170,
                 child: userData.when(
                     data: (data) {
-                      user = data.firstWhere((element) => element.metadata!['userId'] == uid);
+                      user = data.firstWhere((element) => element.metadata!['userId'] == uid, orElse: (){
+                        return types.User(
+                          id: 'not found'
+                        );
+                      });
                       final dat = data
-                          .where((element) => element.metadata!['userId'] != uid)
+                          .where((element) => element.id != uid)
                           .toList();
-                      return ListView.builder(
+                      return  ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: dat.length,
                           itemBuilder: (context, index) {
@@ -211,7 +215,7 @@ late types.User user;
                                   ),
                                 InkWell(
                                   onTap: (){
-                                    Get.to(() => DetailPage(dat, user), transition: Transition.leftToRight);
+                                    Get.to(() => DetailScreen(dat), transition: Transition.leftToRight);
                                   },
                                   child: Container(
                                       height: 300,

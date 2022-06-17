@@ -4,6 +4,7 @@ import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/image_provider.dart';
 import 'package:firestart/providers/loginProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,7 @@ class AuthPage extends StatelessWidget {
             final isLogin = ref.watch(loginProvider);
             final isView = ref.watch(isViewPro).isView;
             final image = ref.watch(imageProvider).image;
+            final isLoad = ref.watch(loadingProvider);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
@@ -102,29 +104,34 @@ class AuthPage extends StatelessWidget {
                     SizedBox(height: 20,),
 
                     ElevatedButton(
+                       style: ElevatedButton.styleFrom(
+                         minimumSize: Size(200, 45)
+                       ),
                         onPressed: () async{
                           _form.currentState!.save();
+                          SystemChannels.textInput.invokeMethod('TextInput.hide');
                           if(_form.currentState!.validate()){
                             if(isLogin){
+                              ref.read(loadingProvider.notifier).toggle();
                           final response = await ref.read(authProvider).userLogin(
                               email: mailController.text.trim(),
                               password: passController.text.trim()
                           );
                           if(response != 'success'){
+                            ref.read(loadingProvider.notifier).toggle();
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 duration: Duration(seconds: 2),
                                 content: Text(response)));
                           }
-
                             }else{
-
                               if(image == null){
                                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                   duration: Duration(seconds: 1),
                                     content: Text('please select an image')));
                               }else{
+                                ref.read(loadingProvider.notifier).toggle();
                                 await ref.read(authProvider).userSignUp(
                                     email: mailController.text.trim(),
                                     password: passController.text.trim(),
@@ -139,7 +146,9 @@ class AuthPage extends StatelessWidget {
 
                           }
 
-                        }, child: Text('Submit')
+                        }, child:isLoad ?  Center(child: CircularProgressIndicator(
+                      color: Colors.white,
+                    )): Text('Submit')
                     ),
                     SizedBox(height: 20,),
                     Row(
@@ -151,7 +160,7 @@ class AuthPage extends StatelessWidget {
                             onPressed: (){
                               ref.read(loginProvider.notifier).toggle();
 
-                            }, child: Text(isLogin ? 'SignUp' : 'Login')
+                            }, child:  Text(isLogin ? 'SignUp' : 'Login')
                         )
                       ],
                     )
