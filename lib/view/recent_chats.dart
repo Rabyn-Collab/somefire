@@ -25,7 +25,7 @@ class RecentChats extends StatelessWidget {
                           final friend = data[index].users.firstWhere((element) => element.id !=uid);
                           return ListTile(
                             onTap: (){
-                             Get.to(() => ChatPage(room: data[index], user: friend.metadata!['userToken']));
+                             Get.to(() => ChatPage(room: data[index], user: friend));
                             },
                             leading: CircleAvatar(
                          backgroundImage: NetworkImage(data[index].imageUrl!),

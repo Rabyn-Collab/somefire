@@ -76,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
       final name = result.name;
 
       try {
-        final reference = FirebaseStorage.instance.ref().child('userImage/$name');
+        final reference = FirebaseStorage.instance.ref().child('chatImage/$name');
         await reference.putFile(file);
         final uri = await reference.getDownloadURL();
 
@@ -111,31 +111,30 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleSendPressed(types.PartialText message) async {
-    print(widget.user.metadata!['userToken']);
-          // final dio = Dio();
-          // try{
-          //
-          //   final response = await dio.post('https://fcm.googleapis.com/fcm/send', data: {
-          //     "notification": {
-          //       "title": "${widget.user.firstName}",
-          //       "body": "${message.text}",
-          //       "android_channel_id": "High_importance_channel"
-          //     },
-          //     "to": '${widget.user.metadata!['userToken']}'
-          //   }, options: Options(
-          //     headers: {
-          //       HttpHeaders.authorizationHeader: 'key=AAAANmsDHV8:APA91bGq2ylH1AYVTcSRPAmDelveo46aXRygtMNUkKqQWmhBRGYtC4SmDrQOwDCODwj9eRVtQRi2O2O0Z8K9I4qO-5637gJmk73jPXy8pkjr28JbS0gky5OVjXRKAIBa-42fVJuq24Z9'
-          //     }
-          //   ));
-          //
-          // }on DioError catch (err){
-          //
-          // }
+          final dio = Dio();
+          try{
 
-    // FirebaseChatCore.instance.sendMessage(
-    //   message,
-    //   widget.room.id,
-    // );
+            final response = await dio.post('https://fcm.googleapis.com/fcm/send', data: {
+              "notification": {
+                "title": "${widget.user.firstName}",
+                "body": "${message.text}",
+                "android_channel_id": "High_importance_channel"
+              },
+              "to": '${widget.user.metadata!['userToken']}'
+            }, options: Options(
+              headers: {
+                HttpHeaders.authorizationHeader: 'key=AAAANmsDHV8:APA91bGq2ylH1AYVTcSRPAmDelveo46aXRygtMNUkKqQWmhBRGYtC4SmDrQOwDCODwj9eRVtQRi2O2O0Z8K9I4qO-5637gJmk73jPXy8pkjr28JbS0gky5OVjXRKAIBa-42fVJuq24Z9'
+              }
+            ));
+
+          }on DioError catch (err){
+
+          }
+
+    FirebaseChatCore.instance.sendMessage(
+      message,
+      widget.room.id,
+    );
   }
 
   void _setAttachmentUploading(bool uploading) {
