@@ -110,41 +110,10 @@ class AuthPage extends StatelessWidget {
                         onPressed: () async{
                           _form.currentState!.save();
                           SystemChannels.textInput.invokeMethod('TextInput.hide');
-                          if(_form.currentState!.validate()){
-                            if(isLogin){
-                              ref.read(loadingProvider.notifier).toggle();
-                          final response = await ref.read(authProvider).userLogin(
-                              email: mailController.text.trim(),
-                              password: passController.text.trim()
-                          );
-                          if(response != 'success'){
-                            ref.read(loadingProvider.notifier).toggle();
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                duration: Duration(seconds: 2),
-                                content: Text(response)));
-                          }
-                            }else{
-                              if(image == null){
-                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  duration: Duration(seconds: 1),
-                                    content: Text('please select an image')));
-                              }else{
-                                ref.read(loadingProvider.notifier).toggle();
-                                await ref.read(authProvider).userSignUp(
-                                    email: mailController.text.trim(),
-                                    password: passController.text.trim(),
-                                    userName: nameController.text.trim(),
-                                    image: image);
-
-                              }
 
 
-                            }
 
 
-                          }
 
                         }, child:isLoad ?  Center(child: CircularProgressIndicator(
                       color: Colors.white,
