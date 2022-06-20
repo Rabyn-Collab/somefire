@@ -1,4 +1,5 @@
 import 'package:firestart/models/user.dart';
+import 'package:firestart/view/status_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -19,10 +20,13 @@ void main () async{
 
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: StatusPage()
+    );
   }
 }

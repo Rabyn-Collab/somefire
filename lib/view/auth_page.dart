@@ -23,7 +23,6 @@ class AuthPage extends StatelessWidget {
           builder: (context, ref, child) {
             final isLogin = ref.watch(loginProvider);
             final isView = ref.watch(isViewPro).isView;
-            final image = ref.watch(imageProvider).image;
             final isLoad = ref.watch(loadingProvider);
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -85,21 +84,7 @@ class AuthPage extends StatelessWidget {
                           hintText: 'password'
                       ),
                     ),
-                    SizedBox(height: 20,),
 
-                    if(isLogin == false) InkWell(
-                      onTap: (){
-                        ref.read(imageProvider).imagePick();
-                      },
-                      child: Container(
-                        decoration:  BoxDecoration(
-                          border: Border.all(color: Colors.black)
-                        ),
-                        height: 150,
-                        width: 150,
-                        child: image == null ? Center(child: Text('please select image'),) : Image.file(File(image.path)),
-                      ),
-                    ),
 
                     SizedBox(height: 20,),
 
@@ -110,11 +95,11 @@ class AuthPage extends StatelessWidget {
                         onPressed: () async{
                           _form.currentState!.save();
                           SystemChannels.textInput.invokeMethod('TextInput.hide');
-
-
-
-
-
+                          ref.read(authProvider.notifier).userSignUp(
+                              email: mailController.text.trim(),
+                              password: passController.text.trim(),
+                              full_name: nameController.text.trim()
+                          );
                         }, child:isLoad ?  Center(child: CircularProgressIndicator(
                       color: Colors.white,
                     )): Text('Submit')
@@ -123,8 +108,6 @@ class AuthPage extends StatelessWidget {
                     Row(
                       children: [
                         Text(isLogin ? 'not a member' : 'already member'),
-
-
                         TextButton(
                             onPressed: (){
                               ref.read(loginProvider.notifier).toggle();
