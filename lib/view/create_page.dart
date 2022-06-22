@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/crud_provider.dart';
 import 'package:firestart/providers/image_provider.dart';
-import 'package:firestart/providers/loginProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
+
 
 
 
@@ -14,6 +12,7 @@ class CreatePage extends StatelessWidget {
   final _form = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descController = TextEditingController();
+  final priceController = TextEditingController();
 
 
   @override
@@ -58,6 +57,20 @@ class CreatePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20,),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      validator: (val){
+                        if(val!.isEmpty) {
+                          return 'please provide price';
+                        }
+                        return null;
+                      },
+                      controller: priceController,
+                      decoration: InputDecoration(
+                          hintText: 'price'
+                      ),
+                    ),
+                    SizedBox(height: 20,),
                     InkWell(
                       onTap: (){
                         ref.read(imageProvider).imagePick();
@@ -78,7 +91,15 @@ class CreatePage extends StatelessWidget {
                         onPressed: () async{
                           _form.currentState!.save();
                           if(_form.currentState!.validate()){
+                              if(image == null){
 
+                              }else{
+                                final response = await ref.read(crudProvider).productAdd(
+                                    label: titleController.text.trim(),
+                                    detail: descController.text.trim(),
+                                    price: int.parse(priceController.text.trim()),
+                                    image: image);
+                              }
 
 
                           }

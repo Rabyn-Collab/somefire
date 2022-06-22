@@ -31,7 +31,7 @@ class AuthProvider extends StateNotifier<List<User>>{
     }
   }
 
-  Future<void> userLogin({required String email, required String password, required String full_name}) async{
+  Future<void> userLogin({required String email, required String password}) async{
     final dio = Dio();
     try{
       final response = await dio.post(Api.login, data: {

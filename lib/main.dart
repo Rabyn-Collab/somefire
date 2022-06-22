@@ -2,6 +2,7 @@ import 'package:firestart/models/user.dart';
 import 'package:firestart/view/status_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 
 final boxProvider = Provider<List<User>>((ref) => []);
@@ -24,7 +25,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         home: StatusPage()
     );

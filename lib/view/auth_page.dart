@@ -95,11 +95,19 @@ class AuthPage extends StatelessWidget {
                         onPressed: () async{
                           _form.currentState!.save();
                           SystemChannels.textInput.invokeMethod('TextInput.hide');
-                          ref.read(authProvider.notifier).userSignUp(
-                              email: mailController.text.trim(),
-                              password: passController.text.trim(),
-                              full_name: nameController.text.trim()
-                          );
+                          if(isLogin){
+                            ref.read(authProvider.notifier).userLogin(
+                                email: mailController.text.trim(),
+                                password: passController.text.trim(),
+                            );
+                          }else{
+                            ref.read(authProvider.notifier).userSignUp(
+                                email: mailController.text.trim(),
+                                password: passController.text.trim(),
+                                full_name: nameController.text.trim()
+                            );
+                          }
+
                         }, child:isLoad ?  Center(child: CircularProgressIndicator(
                       color: Colors.white,
                     )): Text('Submit')
