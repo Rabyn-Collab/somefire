@@ -99,6 +99,10 @@ class CreatePage extends StatelessWidget {
                                     detail: descController.text.trim(),
                                     price: int.parse(priceController.text.trim()),
                                     image: image);
+                                ref.refresh(productProvider);
+                                if(response == 'success'){
+                                  Navigator.of(context).pop();
+                                }
                               }
 
 
