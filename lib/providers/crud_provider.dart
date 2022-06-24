@@ -41,6 +41,51 @@ class CrudProvider {
     }
   }
 
+  Future<String> updateProduct({required String label, required String detail, required int price, XFile? image,
+  String? imagePath, required String productId
+  }) async{
+    final dio = Dio();
+    final box = Hive.box<User>('users').values.toList();
+    try{
+      if(image == null){
+        final response = await dio.patch('${Api.postUpdate}/$productId', data: {
+          'photo': 'no need to update',
+          'product_name': label,
+          'product_detail': detail,
+          'price': price
+        }, options: Options(
+            headers: {
+              HttpHeaders.authorizationHeader:  'Bearer ${box[0].token}',
+            }
+        ));
+      }else{
+        final _formData = FormData.fromMap({
+          'product_name': label,
+          'product_detail':  detail,
+          'price': price,
+          'imageUrl': imagePath,
+          'photo':  await MultipartFile.fromFile(image.path, contentType: MediaType(
+              'image', image.path.split('.').last)),
+        });
+
+        final response = await dio.patch('${Api.postUpdate}/$productId', data: _formData, options: Options(
+            headers: {
+              HttpHeaders.authorizationHeader:  'Bearer ${box[0].token}',
+            }
+        ));
+
+      }
+
+
+      return 'success';
+    }on DioError catch (err){
+      print(err.message);
+      print(err.response);
+      return '${err.message}';
+    }
+  }
+
+
 
 
   Future<List<Product>> getProduct() async{

@@ -2,6 +2,7 @@ import 'package:firestart/api.dart';
 import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/crud_provider.dart';
 import 'package:firestart/view/create_page.dart';
+import 'package:firestart/view/customize_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -74,6 +75,10 @@ class MainPage extends StatelessWidget {
                   title: Text(authData[0].email),
                 ),
                 ListTile(
+                  onTap: (){
+                    Navigator.of(context).pop();
+                    Get.to(() => CustomizePage(), transition: Transition.leftToRight);
+                  },
                   leading: Icon(Icons.settings_rounded),
                   title: Text('customize product'),
                 ),
