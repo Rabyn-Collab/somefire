@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -64,10 +65,9 @@ class CrudProvider {
           'product_detail':  detail,
           'price': price,
           'imageUrl': imagePath,
-          'photo':  await MultipartFile.fromFile(image.path, contentType: MediaType(
+          'image':  await MultipartFile.fromFile(image.path, contentType: MediaType(
               'image', image.path.split('.').last)),
         });
-
         final response = await dio.patch('${Api.postUpdate}/$productId', data: _formData, options: Options(
             headers: {
               HttpHeaders.authorizationHeader:  'Bearer ${box[0].token}',
@@ -98,6 +98,32 @@ class CrudProvider {
       throw '${err.message}';
     }
   }
+
+
+
+
+  Future<String> productRemove({required String productId,  required String imageUrl}) async{
+    final dio = Dio();
+    final box = Hive.box<User>('users').values.toList();
+    try{
+
+      final response = await dio.delete('${Api.postRemove}/$productId', data: {
+        'photo': imageUrl
+      }, options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader:  'Bearer ${box[0].token}',
+          }
+      ));
+      return 'success';
+    }on DioError catch (err){
+      print(err.message);
+      print(err.response);
+      return '${err.message}';
+    }
+  }
+
+
+
 
 
 

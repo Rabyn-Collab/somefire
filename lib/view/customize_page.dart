@@ -40,7 +40,27 @@ class CustomizePage extends StatelessWidget {
                                         }, icon: Icon(Icons.edit)),
                                     IconButton(
                                         onPressed: (){
+                                          Get.defaultDialog(
+                                            title: 'remove product',
+                                            content: Text('Are you sure'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () async{
 
+                                                    ref.read(crudProvider).productRemove(
+                                                        productId: data[index].id,
+                                                        imageUrl: data[index].image
+                                                    );
+                                                await   ref.refresh(productProvider);
+                                                    Navigator.of(context).pop();
+                                                  }, child: Text('yes')),
+                                              TextButton(
+                                                  onPressed: (){
+                                                    Navigator.of(context).pop();
+                                                  }, child: Text('no'))
+                                            ]
+
+                                          );
                                         }, icon: Icon(Icons.delete)
                                     ),
                                     ],
