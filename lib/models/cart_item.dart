@@ -9,22 +9,22 @@ part 'cart_item.g.dart';
 @HiveType(typeId: 1)
 class CartItem extends HiveObject{
   @HiveField(0)
-  final String id;
+   String id;
 
   @HiveField(1)
-  final String title;
+   String title;
 
   @HiveField(2)
-  final int quantity;
+   int quantity;
 
   @HiveField(3)
-  final String imageUrl;
+   String imageUrl;
 
   @HiveField(4)
-  final int price;
+   int price;
 
   @HiveField(5)
-  final int total;
+   int total;
 
   CartItem({
     required this.imageUrl,
