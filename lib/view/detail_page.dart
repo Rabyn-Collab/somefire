@@ -1,6 +1,8 @@
 import 'package:firestart/api.dart';
 import 'package:firestart/models/product.dart';
+import 'package:firestart/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 
@@ -43,17 +45,48 @@ class DetailPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.black,
-                                minimumSize: Size(0, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25)
-                                )
-                              ),
-                              onPressed: (){}, child: Text('add to cart'.toUpperCase(), style: TextStyle(fontSize: 15),)),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.black,
+                                      minimumSize: Size(0, 50),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25)
+                                      )
+                                  ),
+                                  onPressed: () {
+                                 final response = ref.read(cartProvider.notifier).addToCart(product);
+                                 if(response == 'success'){
+                                 //  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                     duration: Duration(milliseconds: 1500),
+                                       content: Text('success fully added to cart'),
+                                     action: SnackBarAction(
+                                         label: 'Go to Cart',
+                                         onPressed: (){
+
+                                         }),
+                                   ));
+                                 }else{
+                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                       duration: Duration(milliseconds: 1500),
+                                       content: Text(response),
+                                     action: SnackBarAction(
+                                         label: 'Go to Cart',
+                                         onPressed: (){
+
+                                         }),
+                                   ));
+                                 }
+                                  },
+                                  child: Text('add to cart'.toUpperCase(),
+                                    style: TextStyle(fontSize: 15),)),
+                            );
+                          }
                         ),
                       ],
                     ),

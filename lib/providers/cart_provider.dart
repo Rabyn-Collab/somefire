@@ -30,7 +30,7 @@ class CartProvider extends StateNotifier<List<CartItem>>{
            final cart = state.firstWhere((element) => product.id == element.id, orElse: (){
              return CartItem(imageUrl: '', id: '', title: 'not added', quantity: 0, price: 0, total: 0);
            });
-           if(cart.title != 'not added'){
+           if(cart.title == 'not added'){
              final newCart = CartItem(
                  imageUrl: product.image,
                  id: product.id,
@@ -53,6 +53,10 @@ class CartProvider extends StateNotifier<List<CartItem>>{
         cartItem.quantity = cartItem.quantity+ 1;
         cartItem.total = cartItem.price * cartItem.quantity ;
         cartItem.save();
+        state = [
+          for(final element in state)
+            if(element == cartItem) cartItem else element
+        ];
       }
 
 
@@ -61,6 +65,10 @@ class CartProvider extends StateNotifier<List<CartItem>>{
        cartItem.quantity = cartItem.quantity- 1;
        cartItem.total = cartItem.price * cartItem.quantity ;
        cartItem.save();
+       state = [
+         for(final element in state)
+           if(element == cartItem) cartItem else element
+       ];
      }
 
   }
@@ -74,6 +82,10 @@ class CartProvider extends StateNotifier<List<CartItem>>{
      return total;
   }
 
+  void removeAll(){
+    Hive.box<CartItem>('carts').clear();
+   state = [];
+  }
 
 
 }

@@ -1,6 +1,7 @@
 import 'package:firestart/api.dart';
 import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/crud_provider.dart';
+import 'package:firestart/view/cart_page.dart';
 import 'package:firestart/view/create_page.dart';
 import 'package:firestart/view/customize_page.dart';
 import 'package:firestart/view/detail_page.dart';
@@ -20,6 +21,12 @@ class MainPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('SampleShop'),
         backgroundColor: Colors.purple,
+        actions: [
+          IconButton(
+              onPressed: (){
+            Get.to(() => CartPage(), transition: Transition.leftToRight);
+          }, icon: Icon(Icons.shopping_cart))
+        ],
       ),
         body: Consumer(
             builder: (context, ref, child) {
