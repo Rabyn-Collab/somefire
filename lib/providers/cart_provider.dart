@@ -40,7 +40,7 @@ class CartProvider extends StateNotifier<List<CartItem>>{
                  total: product.price
              );
              Hive.box<CartItem>('carts').add(newCart);
-             state = [newCart];
+             state = [...state, newCart];
              return 'success';
            }else{
              return 'already added to cart';

@@ -3,6 +3,9 @@ import 'package:firestart/models/product.dart';
 import 'package:firestart/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+
+import 'cart_page.dart';
 
 
 
@@ -68,7 +71,7 @@ class DetailPage extends StatelessWidget {
                                      action: SnackBarAction(
                                          label: 'Go to Cart',
                                          onPressed: (){
-
+                                           Get.to(() => CartPage(), transition: Transition.zoom);
                                          }),
                                    ));
                                  }else{
@@ -78,7 +81,7 @@ class DetailPage extends StatelessWidget {
                                      action: SnackBarAction(
                                          label: 'Go to Cart',
                                          onPressed: (){
-
+                                             Get.to(() => CartPage(), transition: Transition.zoom);
                                          }),
                                    ));
                                  }

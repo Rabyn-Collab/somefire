@@ -1,4 +1,5 @@
 import 'package:firestart/providers/cart_provider.dart';
+import 'package:firestart/providers/order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -98,7 +99,13 @@ class CartPage extends StatelessWidget {
                                                 25)
                                         )
                                     ),
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      final response = await ref.read(orderProvider).addOrder(
+                                          total: total, carts: cartData);
+                                      if(response == 'success'){
+                                        ref.read(cartProvider.notifier).removeAll();
+                                      }
+
                                     },
                                     child: Text('Check Out'.toUpperCase(),
                                       style: TextStyle(fontSize: 15),)),
