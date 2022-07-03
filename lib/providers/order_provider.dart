@@ -14,16 +14,19 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../models/user.dart';
 
 final orderProvider = Provider((ref) => OrderProvider());
-
+final historyProvider = FutureProvider.family((ref, String id) => OrderProvider().getOrderHistory(id: id));
 class OrderProvider {
 
 
-
-
   Future<List<Order>> getOrderHistory({required String id}) async{
+    final box = Hive.box<User>('users').values.toList();
     final dio = Dio();
     try{
-      final response = await dio.get('${Api.orderHistory}/$id');
+      final response = await dio.get('${Api.orderHistory}/$id', options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader:  'Bearer ${box[0].token}',
+          }
+      ));
       final  data = (response.data as List).map((e) =>Order.fromJson(e)).toList();
       return data;
     }on DioError catch (err){
@@ -47,7 +50,8 @@ class OrderProvider {
           headers: {
             HttpHeaders.authorizationHeader:  'Bearer ${box[0].token}',
           }
-      ));
+      )
+      );
       return 'success';
     }on DioError catch (err){
       print(err.message);

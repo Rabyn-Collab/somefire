@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
+import 'order_page.dart';
+
 
 
 
@@ -104,6 +106,15 @@ class MainPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.add_business_rounded),
                   title: Text('create product'),
+                ),
+
+                ListTile(
+                  onTap: (){
+                    Navigator.of(context).pop();
+                    Get.to(() => OrderPage(), transition: Transition.leftToRight);
+                  },
+                  leading: Icon(Icons.access_time_filled_rounded),
+                  title: Text('order history'),
                 ),
 
                 ListTile(

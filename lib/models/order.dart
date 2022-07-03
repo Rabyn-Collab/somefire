@@ -21,7 +21,7 @@ class Order{
     return Order(
         dateTime: json['dateTime'],
         userId: json['userId'],
-        products: (json['json'] as List).map((e) => CartItem.fromJson(e)).toList(),
+        products: (json['products'] as List).map((e) => CartItem.fromJson(e)).toList(),
         amount: json['amount']
     );
   }
