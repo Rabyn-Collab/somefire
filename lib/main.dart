@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 
+
 final boxProvider = Provider<List<User>>((ref) => []);
 final boxCart = Provider<List<CartItem>>((ref) => []);
 

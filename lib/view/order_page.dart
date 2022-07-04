@@ -3,6 +3,7 @@ import 'package:firestart/providers/auth_provider.dart';
 import 'package:firestart/providers/order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -25,13 +26,17 @@ class OrderPage extends StatelessWidget {
                     ) : ListView.builder(
                         itemCount: data.length,
                         itemBuilder: (context, index){
+
                           final dateTime = DateTime.parse(data[index].dateTime);
+                          final dateString = DateFormat('dd-MM-yyyy').format(dateTime);
+                          String formattedDate = DateFormat.jm().format(dateTime);
+                          print(formattedDate + ' ' + dateString);
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('$dateTime'),
+                                Text('$dateString $formattedDate'),
                                 SizedBox(height: 10,),
                                 Column(
                                   children: data[index].products.map((e){
