@@ -1,3 +1,4 @@
+import 'package:firestart/location/location_show.dart';
 import 'package:firestart/models/cart_item.dart';
 import 'package:firestart/models/user.dart';
 import 'package:firestart/view/status_page.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+
+import 'location/location_check.dart';
 
 
 final boxProvider = Provider<List<User>>((ref) => []);
@@ -33,7 +36,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: StatusPage()
+        home: LocationCheck()
     );
   }
 }
